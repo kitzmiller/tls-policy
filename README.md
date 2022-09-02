@@ -87,6 +87,7 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 | NULL | ❌ | ❌ | ❌ | Atypical. Vulnerable to MitM attacks. |
 | PSK | ❌ | ❌ | ✅ | Atypical. |
 | DSS | ❌ | ❌ | ✅ | Atypical. |
+| [SRP](https://www.rfc-editor.org/rfc/rfc2945.html) | ❌ | ✅ | ✅ | Atypical, CBC-mode HMACs only. |
 | RSA | ✅ | ✅ | ✅ | Requires an RSA certificate (typical). Not to be confused with KxRSA. |
 | [ECDSA](https://www.rfc-editor.org/rfc/rfc8422) | ✅ | ✅ | ✅ | Requires a DSA certificate. |
 
@@ -104,6 +105,7 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 
 | Kx | Secure | Deprecated | Legacy | Notes |
 | -- | :--: | :--: | :--: | -- |
+| PSK | ❌ | ❌ | ✅ | Atypical. Also RSAPSK, DHEPSK, and ECDHEPSK. |
 | [SRP](https://www.rfc-editor.org/rfc/rfc2945.html) | ❌ | ✅ | ✅ | Atypical, CBC-mode HMACs only. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
 | RSA | ❌ | ✅ | ✅ | Deprecated in [draft-ietf-tls-deprecate-obsolete-kex](https://www.ietf.org/id/draft-ietf-tls-deprecate-obsolete-kex-00.html), no PFS. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
 | DH | ❌ | ✅ | ✅ | Deprecated in [draft-ietf-tls-deprecate-obsolete-kex](https://www.ietf.org/id/draft-ietf-tls-deprecate-obsolete-kex-00.html), no PFS. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
@@ -119,32 +121,35 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 | Cipher | Secure | Deprecated | Legacy | Notes |
 | -- | :--: | :--: | :--: | -- |
 | NULL | ❌ | ❌ | ❌ | Atypical, cipher suites which do not actually encrypt data should obviously be avoided at all costs. |
-| EXP | ❌ | ❌ | ❌ | Export ciphers DES, RC2, and RC4-40 use 40-bit keys which are 300 million billion billion times weaker than 128-bit keys. |
-| IDEA | ❌ | ❌ | ❌ | Deprecated by [RFC5469](https://www.rfc-editor.org/rfc/rfc5469.html), Broken by [MitM attacks from 2011](https://link.springer.com/article/10.1007/s00145-013-9162-9), reduced to 126-bits by and a bicliques attack from 2012. |
-| RC4 | ❌ | ❌ | ❌ | Prohibited by [RFC 7465](https://www.rfc-editor.org/rfc/rfc7465.html). Disabled in [Chrome](https://support.google.com/chrome/answer/6098869), [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
+| [EXP](https://en.wikipedia.org/wiki/Export_of_cryptography_from_the_United_States) | ❌ | ❌ | ❌ | Export ciphers DES, RC2, and RC4-40 use 40-bit keys which are 300 million billion billion times weaker than 128-bit keys. |
+| [IDEA](https://en.wikipedia.org/wiki/International_Data_Encryption_Algorithm) | ❌ | ❌ | ❌ | Deprecated by [RFC5469](https://www.rfc-editor.org/rfc/rfc5469.html), Broken by [MitM attacks from 2011](https://link.springer.com/article/10.1007/s00145-013-9162-9), reduced to 126-bits by and a bicliques attack from 2012. |
+| [RC4](https://en.wikipedia.org/wiki/RC4) | ❌ | ❌ | ❌ | Prohibited by [RFC 7465](https://www.rfc-editor.org/rfc/rfc7465.html). Disabled in [Chrome](https://bugs.chromium.org/p/chromium/issues/detail?id=375342#c87), [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
 | [3DES](https://www.rfc-editor.org/rfc/rfc1851.html) | ❌ | ❌ | ❌ | Broken by [Sweet32](https://sweet32.info/), [NIST Deprecation](https://csrc.nist.gov/News/2017/Update-to-Current-Use-and-Deprecation-of-TDEA). |
 | [ARIA](https://www.rfc-editor.org/rfc/rfc5794.html) | ❌ | ✅ | ✅ | Atypical outside of South Korea. |
 | [SEED](https://www.rfc-editor.org/rfc/rfc4162.html) | ❌ | ✅ | ✅ | Atypical outside of South Korea, CBC-mode HMACs only, no PFS. |
 | [Camellia](https://www.rfc-editor.org/rfc/rfc5932.html) | ❌ | ✅ | ✅ | CBC-mode HMACs only. |
 | [AES](https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.197.pdf) | ✅ | ✅ | ✅ | AES-128 and AES-256 are permissible for all uses. AES-128 is preferred due to lower CPU overhead while retaining the required security. |
-| CHACHA20/POLY1305| ✅ | ✅ | ✅ | Faster than AES on devices without hardware support |
+| [CHACHA20/POLY1305](https://www.rfc-editor.org/rfc/rfc7905) | ✅ | ✅ | ✅ | Faster than AES on devices without hardware support |
 
 
 ## HMACs
+
+### HMAC modes
+
 | HMAC mode | Secure | Deprecated | Legacy | Notes |
 | -- | :--: | :--: | :--: | -- |
-| CBC | ❌ | ✅ | ✅ | Practical application in TLS requires frequent padding to match the block size of the given cipher and this has lead to problems. [[1](https://en.wikipedia.org/wiki/Padding_oracle_attack)][[2](https://blog.cloudflare.com/padding-oracles-and-the-decline-of-cbc-mode-ciphersuites/)] [[3](https://docs.microsoft.com/en-us/dotnet/standard/security/vulnerabilities-cbc-mode)]. Deprecated in [Chrome](https://groups.google.com/a/chromium.org/g/blink-dev/c/1eKb8bqT1Ds?pli=1), [Firefox](https://bugzilla.mozilla.org/show_bug.cgi?id=1316300). |
+| CBC | ❌ | ✅ | ✅ | Practical application in TLS requires frequent padding to match the block size of the given cipher and this has lead to problems. [[1](https://en.wikipedia.org/wiki/Padding_oracle_attack)][[2](https://blog.cloudflare.com/padding-oracles-and-the-decline-of-cbc-mode-ciphersuites/)][[3](https://docs.microsoft.com/en-us/dotnet/standard/security/vulnerabilities-cbc-mode)][[4](https://blog.qualys.com/product-tech/2019/04/22/zombie-poodle-and-goldendoodle-vulnerabilities)]. Deprecated in [Chrome](https://groups.google.com/a/chromium.org/g/blink-dev/c/1eKb8bqT1Ds?pli=1), [Firefox](https://bugzilla.mozilla.org/show_bug.cgi?id=1316300). |
+| [CCM_8](https://www.rfc-editor.org/rfc/rfc7251) | ❌ | ❌ | ❌ | Only provides a 64-bit HMACs. |
+| [CCM](https://www.rfc-editor.org/rfc/rfc7251) | ❌ | ✅ | ✅ | Atypical, primarily for use in embedded systems. Introduced after GCM, low adoption. |
 | [AEAD](https://www.rfc-editor.org/rfc/rfc5116) | ✅ | ✅ | ✅ | |
 
---
+### HMAC algorithms
 
 | HMAC | Secure | Deprecated | Legacy | Notes |
 | -- | :--: | :--: | :--: | -- |
-| [MD5](https://www.rfc-editor.org/rfc/rfc1321.html) | ❌ | ❌ | ❌ | Deprecated by [RFC6151](https://www.rfc-editor.org/rfc/rfc6151.html), prohibited by [draft-ietf-tls-md5-sha1-deprecate](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html). |
-| [CCM_8](https://www.rfc-editor.org/rfc/rfc7251) | ❌ | ❌ | ❌ | Only provides a 64-bit HMACs. |
-| SHA1 | ❌ | ❌ | ✅ | Prohibited by [draft-ietf-tls-md5-sha1-deprecate](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html). |
+| [MD5](https://www.rfc-editor.org/rfc/rfc1321.html) | ❌ | ❌ | ❌ | Deprecated by [RFC6151](https://www.rfc-editor.org/rfc/rfc6151.html), prohibited by [draft-ietf-tls-md5-sha1-deprecate](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html). Disabled in [Chrome](https://www.chromium.org/Home/chromium-security/education/tls/#TOC-Cipher-Suites). |
+| SHA1 | ❌ | ❌ | ✅ | Prohibited by [draft-ietf-tls-md5-sha1-deprecate](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html). Disabled in [Chrome](https://www.chromium.org/Home/chromium-security/education/tls/#TOC-Cipher-Suites). |
 | SHA256 SHA384 | ❌ | ✅ | ✅ | CBC-mode only. |
-| [CCM](https://www.rfc-editor.org/rfc/rfc7251) | ✅ | ✅ | ✅ | Atypical, primarily for use in embedded systems. Introduced after GCM, low adoption. |
 | [GCM](https://www.rfc-editor.org/rfc/rfc5288.html) | ✅ | ✅ | ✅ | |
 
 
