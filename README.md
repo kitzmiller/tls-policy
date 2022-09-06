@@ -95,11 +95,12 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 
 | Certificate | Secure | Deprecated | Legacy | Notes |
 | -- | :--: | :--: | :--: | -- |
-| RSA | ✅ | ✅ | ✅ | Must be at least 2048-bits. |
-| DSS | ✅ | ✅ | ✅ | Must be at least 256-bits. |
+| RSA | ✅ | ✅ | ✅ | Must be at least 2048-bits. ([Chrome](https://archive.cabforum.org/pipermail/public/2013-September/002233.html), [Firefox](https://wiki.mozilla.org/CA:MD5and1024), [Safari](https://support.apple.com/en-us/HT210176))|
+| DSS | ✅ | ✅ | ✅ | Must be at least 256-bits. ([Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web)) |
 
 **Note:** Certificate lifetimes must not exceed [398 days](https://cabforum.org/2017/02/24/ballot-185-limiting-lifetime-certificates/).
-**Note:** Certificates [must not](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html) be [signed with SHA1](https://security.googleblog.com/2014/09/gradually-sunsetting-sha-1.html).
+
+**Note:** Certificates must not be signed with SHA1. [IETF](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html), [Chrome](https://security.googleblog.com/2014/09/gradually-sunsetting-sha-1.html), [Firefox](https://blog.mozilla.org/security/2015/10/20/continuing-to-phase-out-sha-1-certificates/), [Safari](https://support.apple.com/en-us/HT210176).
 
 ## Key Exchange
 
@@ -148,7 +149,7 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 | HMAC | Secure | Deprecated | Legacy | Notes |
 | -- | :--: | :--: | :--: | -- |
 | [MD5](https://www.rfc-editor.org/rfc/rfc1321.html) | ❌ | ❌ | ❌ | Deprecated by [RFC6151](https://www.rfc-editor.org/rfc/rfc6151.html), prohibited by [draft-ietf-tls-md5-sha1-deprecate](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html). Disabled in [Chrome](https://www.chromium.org/Home/chromium-security/education/tls/#TOC-Cipher-Suites). |
-| SHA1 | ❌ | ❌ | ✅ | Prohibited by [draft-ietf-tls-md5-sha1-deprecate](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html). Disabled in [Chrome](https://www.chromium.org/Home/chromium-security/education/tls/#TOC-Cipher-Suites). |
+| SHA1 | ❌ | ❌ | ✅ | Prohibited by [draft-ietf-tls-md5-sha1-deprecate](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html). Disabled in [Chrome](https://www.chromium.org/Home/chromium-security/education/tls/#TOC-Cipher-Suites), [Firefox](https://blog.mozilla.org/security/2017/02/23/the-end-of-sha-1-on-the-public-web/). |
 | SHA256 SHA384 | ❌ | ✅ | ✅ | CBC-mode only. |
 | [GCM](https://www.rfc-editor.org/rfc/rfc5288.html) | ✅ | ✅ | ✅ | |
 
