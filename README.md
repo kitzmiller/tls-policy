@@ -11,12 +11,13 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 
 ### OpenSSL
 
-    ALL:!aNULL:!PSK:!kRSA:!SRP:!DH:!kECDH:!eNULL:!ARIA:!CAMELLIA:!IDEA:!SEED:!RC4:!3DES:!EXP:!MD5:!SHA1:!SHA256:!SHA384:+AES128:+AES256
+    ALL:!aNULL:!PSK:!kRSA:!SRP:!DH:!kECDH:!eNULL:!ARIA:!CAMELLIA:!IDEA:!SEED:!RC4:!3DES:!EXP:!MD5:!SHA1:!SHA256:!SHA384:+AES128:+AES256:+CHACHA20
 
 ### Apache2
 
     SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
-    SSLCipherSuite ALL:!aNULL:!PSK:!kRSA:!SRP:!DH:!kECDH:!eNULL:!ARIA:!CAMELLIA:!IDEA:!SEED:!RC4:!3DES:!EXP:!MD5:!SHA1:!SHA256:!SHA384:+AES128:+AES256
+    SSLCipherSuite TLSv1.3 TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256 
+    SSLCipherSuite ALL:!aNULL:!PSK:!kRSA:!SRP:!DH:!kECDH:!eNULL:!ARIA:!CAMELLIA:!IDEA:!SEED:!RC4:!3DES:!EXP:!MD5:!SHA1:!SHA256:!SHA384:+AES128:+AES256:+CHACHA20
 
 ### GnuTLS
 
@@ -25,18 +26,20 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 ### Nginx
 
     ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers ALL:!aNULL:!PSK:!kRSA:!SRP:!DH:!kECDH:!eNULL:!ARIA:!CAMELLIA:!IDEA:!SEED:!RC4:!3DES:!EXP:!MD5:!SHA1:!SHA256:!SHA384:+AES128:+AES256;
+    ssl_conf_command Ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+    ssl_ciphers ALL:!aNULL:!PSK:!kRSA:!SRP:!DH:!kECDH:!eNULL:!ARIA:!CAMELLIA:!IDEA:!SEED:!RC4:!3DES:!EXP:!MD5:!SHA1:!SHA256:!SHA384:+AES128:+AES256:+CHACHA20;
 
 ## Deprecated
 
 ### OpenSSL
 
-    ALL:!aNULL:!PSK:!kRSA:!DH:!kECDH:!eNULL:!IDEA:!RC4:!3DES:!EXP:!MD5:+AES128:+AES256
+    ALL:!aNULL:!PSK:!kRSA:!DH:!kECDH:!eNULL:!IDEA:!RC4:!3DES:!EXP:!MD5:+AES128:+AES256:+CHACHA20
 
 ### Apache2
 
     SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
-    SSLCipherSuite ALL:!aNULL:!PSK:!kRSA:!DH:!kECDH:!eNULL:!IDEA:!RC4:!3DES:!EXP:!MD5:+AES128:+AES256
+    SSLCipherSuite TLSv1.3 TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256 
+    SSLCipherSuite ALL:!aNULL:!PSK:!kRSA:!DH:!kECDH:!eNULL:!IDEA:!RC4:!3DES:!EXP:!MD5:+AES128:+AES256:+CHACHA20
 
 ### GnuTLS
 
@@ -45,18 +48,20 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 ### Nginx
 
     ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers ALL:!aNULL:!PSK:!kRSA:!DH:!kECDH:!eNULL:!IDEA:!RC4:!3DES:!EXP:!MD5:+AES128:+AES256;
+    ssl_conf_command Ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+    ssl_ciphers ALL:!aNULL:!PSK:!kRSA:!DH:!kECDH:!eNULL:!IDEA:!RC4:!3DES:!EXP:!MD5:+AES128:+AES256:+CHACHA20;
 
 ## Legacy
 
 ### OpenSSL
 
-    ALL:!aNULL:!eNULL:!ARIA:!IDEA:!RC4:!3DES:!EXP:!MD5:+AES128:+AES256
+    ALL:!aNULL:!eNULL:!ARIA:!IDEA:!RC4:!3DES:!EXP:!MD5:+AES128:+AES256:+CHACHA20
 
 ### Apache2
 
     SSLProtocol all -SSLv3
-    SSLCipherSuite ALL:!aNULL:!eNULL:!ARIA:!IDEA:!RC4:!3DES:!EXP:!MD5:+AES128:+AES256
+    SSLCipherSuite TLSv1.3 TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256 
+    SSLCipherSuite ALL:!aNULL:!eNULL:!ARIA:!IDEA:!RC4:!3DES:!EXP:!MD5:+AES128:+AES256:+CHACHA20
 
 ### GnuTLS
 
@@ -65,7 +70,8 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 ### Nginx
 
     ssl_protocols TLSv1.0 TLSv1.1 TLSv1.2 TLSv1.3;
-    ssl_ciphers ALL:!aNULL:!eNULL:!ARIA:!IDEA:!RC4:!3DES:!EXP:!MD5:+AES128:+AES256;
+    ssl_conf_command Ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+    ssl_ciphers ALL:!aNULL:!eNULL:!ARIA:!IDEA:!RC4:!3DES:!EXP:!MD5:+AES128:+AES256:+CHACHA20;
 
 ## Protocols
 
@@ -116,7 +122,7 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 
 **Note:** Certificate lifetimes must not exceed [398 days](https://cabforum.org/2017/02/24/ballot-185-limiting-lifetime-certificates/).
 
-**Note:** Certificates must not be signed with MD5 ([Firefox](https://bugzilla.mozilla.org/show_bug.cgi?id=650355)) or SHA1([IETF](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html), [Chrome](https://security.googleblog.com/2014/09/gradually-sunsetting-sha-1.html), [Firefox](https://blog.mozilla.org/security/2015/10/20/continuing-to-phase-out-sha-1-certificates/), [Safari](https://support.apple.com/en-us/HT210176)).
+**Note:** Certificates must not be signed with MD5 ([Firefox](https://bugzilla.mozilla.org/show_bug.cgi?id=650355)) or SHA1([IETF](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html), [Chrome](https://security.googleblog.com/2014/09/gradually-sunsetting-sha-1.html), [Firefox](https://blog.mozilla.org/security/2017/02/23/the-end-of-sha-1-on-the-public-web/), [Safari](https://support.apple.com/en-us/HT210176)).
 
 
 ## Encryption
@@ -151,8 +157,9 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 | HMAC | Secure | Deprecated | Legacy | Notes |
 | -- | :--: | :--: | :--: | -- |
 | [MD5](https://www.rfc-editor.org/rfc/rfc1321.html) | ❌ | ❌ | ❌ | Deprecated by [RFC6151](https://www.rfc-editor.org/rfc/rfc6151.html), prohibited by [draft-ietf-tls-md5-sha1-deprecate](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html). Disabled in [Chrome](https://www.chromium.org/Home/chromium-security/education/tls/#TOC-Cipher-Suites). |
-| SHA1 | ❌ | ❌ | ✅ | Prohibited by [draft-ietf-tls-md5-sha1-deprecate](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html). Disabled in [Chrome](https://www.chromium.org/Home/chromium-security/education/tls/#TOC-Cipher-Suites), [Firefox](https://blog.mozilla.org/security/2017/02/23/the-end-of-sha-1-on-the-public-web/). |
-| SHA256 SHA384 | ❌ | ✅ | ✅ | CBC-mode only. |
+| SHA1 | ❌ | ✅ | ✅ | CBC-mode only. |
+| SHA256 | ❌ | ✅ | ✅ | CBC-mode only. |
+| SHA384 | ❌ | ✅ | ✅ | CBC-mode only. |
 | [GCM](https://www.rfc-editor.org/rfc/rfc5288.html) | ✅ | ✅ | ✅ | |
 
 
