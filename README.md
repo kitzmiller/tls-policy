@@ -80,6 +80,22 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 
 **Note:** See also: [Solving the TLS 1.0 Problem](https://docs.microsoft.com/en-us/security/engineering/solving-tls1-problem), [MSA3009008](https://docs.microsoft.com/en-us/security-updates/securityadvisories/2015/3009008).
 
+## Key Exchange
+
+| Kx | Secure | Deprecated | Legacy | Notes |
+| -- | :--: | :--: | :--: | -- |
+| PSK | ❌ | ❌ | ✅ | Atypical. Also RSAPSK, DHEPSK, and ECDHEPSK. |
+| [SRP](https://www.rfc-editor.org/rfc/rfc2945.html) | ❌ | ✅ | ✅ | Atypical, CBC-mode HMACs only. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
+| RSA | ❌ | ✅ | ✅ | Deprecated in [draft-ietf-tls-deprecate-obsolete-kex](https://www.ietf.org/id/draft-ietf-tls-deprecate-obsolete-kex-00.html), no PFS. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
+| DH | ❌ | ✅ | ✅ | Deprecated in [draft-ietf-tls-deprecate-obsolete-kex](https://www.ietf.org/id/draft-ietf-tls-deprecate-obsolete-kex-00.html), no PFS. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
+| DHE | ❌ | ✅ | ✅ | Parameter bit-length must be [at least 2048 bits](https://weakdh.org/). Some TLS implementations improperly implement DH parameter re-use which [weakens](https://raccoon-attack.com/) the cipher. Disabled in [Chrome](https://chromestatus.com/feature/5128908798164992), [Firefox](https://www.mozilla.org/en-US/firefox/78.0/releasenotes/), [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
+| [ECDH](https://www.rfc-editor.org/rfc/rfc8422) | ❌ | ✅ | ✅ | Discouraged in [draft-ietf-tls-deprecate-obsolete-kex](https://www.ietf.org/id/draft-ietf-tls-deprecate-obsolete-kex-00.html), no PFS. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web).|
+| [ECDHE](https://www.rfc-editor.org/rfc/rfc8422) | ✅ | ✅ | ✅ | 
+
+**Note:** For any server using a configuration not supporting [Perfect Forward Secrecy](https://en.wikipedia.org/wiki/Forward_secrecy) (PFS) it is critical that the same certificate (e.g. a wildcard certificate) not be used on any other system. See [DROWN](https://drownattack.com/) and [Heartbleed](https://heartbleed.com).
+
+**Note:** [IISCrypto](https://www.nartac.com/Products/IISCrypto/) mentions "PKCS". Assuming that is [PKCS #3](https://www.teletrust.de/fileadmin/files/oid/oid_pkcs-3v1-4.pdf) then it should be disabled.
+
 ## Authentication
 
 | Auth Mech | Secure | Deprecated | Legacy | Notes |
@@ -100,23 +116,9 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 
 **Note:** Certificate lifetimes must not exceed [398 days](https://cabforum.org/2017/02/24/ballot-185-limiting-lifetime-certificates/).
 
-**Note:** Certificates must not be signed with SHA1. [IETF](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html), [Chrome](https://security.googleblog.com/2014/09/gradually-sunsetting-sha-1.html), [Firefox](https://blog.mozilla.org/security/2015/10/20/continuing-to-phase-out-sha-1-certificates/), [Safari](https://support.apple.com/en-us/HT210176).
+**Note:** Certificates must not be signed with MD5 ([Firefox](https://bugzilla.mozilla.org/show_bug.cgi?id=650355)) or SHA1([IETF](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html), [Chrome](https://security.googleblog.com/2014/09/gradually-sunsetting-sha-1.html), [Firefox](https://blog.mozilla.org/security/2015/10/20/continuing-to-phase-out-sha-1-certificates/), [Safari](https://support.apple.com/en-us/HT210176)).
 
-## Key Exchange
 
-| Kx | Secure | Deprecated | Legacy | Notes |
-| -- | :--: | :--: | :--: | -- |
-| PSK | ❌ | ❌ | ✅ | Atypical. Also RSAPSK, DHEPSK, and ECDHEPSK. |
-| [SRP](https://www.rfc-editor.org/rfc/rfc2945.html) | ❌ | ✅ | ✅ | Atypical, CBC-mode HMACs only. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
-| RSA | ❌ | ✅ | ✅ | Deprecated in [draft-ietf-tls-deprecate-obsolete-kex](https://www.ietf.org/id/draft-ietf-tls-deprecate-obsolete-kex-00.html), no PFS. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
-| DH | ❌ | ✅ | ✅ | Deprecated in [draft-ietf-tls-deprecate-obsolete-kex](https://www.ietf.org/id/draft-ietf-tls-deprecate-obsolete-kex-00.html), no PFS. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
-| DHE | ❌ | ✅ | ✅ | Parameter bit-length must be [at least 2048 bits](https://weakdh.org/). Some TLS implementations improperly implement DH parameter re-use which [weakens](https://raccoon-attack.com/) the cipher. Disabled in [Chrome](https://chromestatus.com/feature/5128908798164992), [Firefox](https://www.mozilla.org/en-US/firefox/78.0/releasenotes/), [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
-| [ECDH](https://www.rfc-editor.org/rfc/rfc8422) | ❌ | ✅ | ✅ | Discouraged in [draft-ietf-tls-deprecate-obsolete-kex](https://www.ietf.org/id/draft-ietf-tls-deprecate-obsolete-kex-00.html), no PFS. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web).|
-| [ECDHE](https://www.rfc-editor.org/rfc/rfc8422) | ✅ | ✅ | ✅ | 
-
-**Note:** For any server using a configuration not supporting [Perfect Forward Secrecy](https://en.wikipedia.org/wiki/Forward_secrecy) (PFS) it is critical that the same certificate (e.g. a wildcard certificate) not be used on any other system. See [DROWN](https://drownattack.com/) and [Heartbleed](https://heartbleed.com).
-
-**Note:** [IISCrypto](https://www.nartac.com/Products/IISCrypto/) mentions "PKCS". Assuming that is [PKCS #3](https://www.teletrust.de/fileadmin/files/oid/oid_pkcs-3v1-4.pdf) then it should be disabled.
 ## Encryption
 
 | Cipher | Secure | Deprecated | Legacy | Notes |
