@@ -1,4 +1,3 @@
-
 # TLS Policy
 
 We have three supported configurations: **Secure**, **Deprecated**, and **Legacy**. Secure is the modern configuration which aims to support the majority of supported software and operating systems. Deprecated still meets the definition of PCI compliance by not allowing any vulnerable configurations but does still support deprecated configurations for older devices. Legacy must only be used when there is a business case requiring interoperability with older devices (e.g. Point-of-Sale registers). While many options are available for legacy configurations it is advised to only enable those cipher suites which are specifically required.
@@ -73,6 +72,23 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
     ssl_conf_command Ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
     ssl_ciphers ALL:!aNULL:!eNULL:!ARIA:!IDEA:!RC4:!3DES:!EXP:!MD5:+AES128:+AES256:+CHACHA20;
 
+## AWS Security Policies
+
+[Documentation](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html)
+
+| Policy | Secure | Deprecated | Legacy | Notes |
+| -- | :--: | :--: | :--: | -- |
+| ELBSecurityPolicy-2016-08 | ❌ | ❌ | ✅ | Uses TLS v1.0, v1.1; CBC-mode ciphers; no PFS. aka Default, aka ELBSecurityPolicy-2015-05.  |
+| ELBSecurityPolicy-TLS-1-0-2015-04 | ❌ | ❌ | ✅ | Uses TLS v1.0, v1.1; CBC-mode ciphers; no PFS. |
+| ELBSecurityPolicy-TLS-1-1-2017-01 | ❌ | ❌ | ✅ | Uses TLS v1.1; CBC-mode ciphers; no PFS. |
+| ELBSecurityPolicy-TLS-1-2-2017-01 | ❌ | ✅ | ✅ | Uses CBC-mode ciphers; no PFS. |
+| ELBSecurityPolicy-TLS-1-2-Ext-2018-06 | ❌ | ✅ | ✅ | Uses CBC-mode ciphesr; no PFS. |
+| ELBSecurityPolicy-FS-2018-06 | ❌ | ❌ | ✅ | Uses TLS v1.0, v1.1; CBC-mode ciphers. |
+| ELBSecurityPolicy-FS-1-1-2019-08 | ❌ | ❌ |  ✅ | Uses TLS v1.1; CBC-mode ciphers. |
+| ELBSecurityPolicy-FS-1-2-2019-08 | ❌ | ✅ | ✅ | Uses CBC-mode ciphers. |
+| ELBSecurityPolicy-FS-1-2-Res-2019-08 | ❌ | ✅ | ✅ | Uses CBC-mode ciphers. |
+| ELBSecurityPolicy-FS-1-2-Res-2020-10 | ✅ | ✅ | ✅ | TLS v1.2 only, no v1.3 yet. |
+
 ## Protocols
 
 | Protocol | Secure | Deprecated | Legacy | Notes |
@@ -132,8 +148,8 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 | NULL | ❌ | ❌ | ❌ | Atypical, cipher suites which do not actually encrypt data should obviously be avoided at all costs. |
 | [EXP](https://en.wikipedia.org/wiki/Export_of_cryptography_from_the_United_States) | ❌ | ❌ | ❌ | Export ciphers DES, RC2, and RC4-40 use 40-bit keys which are 300 million billion billion times weaker than 128-bit keys. |
 | [IDEA](https://en.wikipedia.org/wiki/International_Data_Encryption_Algorithm) | ❌ | ❌ | ❌ | Deprecated by [RFC5469](https://www.rfc-editor.org/rfc/rfc5469.html), Broken by [MitM attacks from 2011](https://link.springer.com/article/10.1007/s00145-013-9162-9), reduced to 126-bits by and a bicliques attack from 2012. |
-| [RC4](https://en.wikipedia.org/wiki/RC4) | ❌ | ❌ | ❌ | Prohibited by [RFC 7465](https://www.rfc-editor.org/rfc/rfc7465.html). Disabled in [Chrome](https://bugs.chromium.org/p/chromium/issues/detail?id=375342#c87), [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
-| [3DES](https://www.rfc-editor.org/rfc/rfc1851.html) | ❌ | ❌ | ❌ | Broken by [Sweet32](https://sweet32.info/), [NIST Deprecation](https://csrc.nist.gov/News/2017/Update-to-Current-Use-and-Deprecation-of-TDEA). |
+| [RC4](https://en.wikipedia.org/wiki/RC4) | ❌ | ❌ | ❌ | Disabled in [Chrome](https://chromestatus.com/feature/6493219084828672), [Firefox](https://blog.mozilla.org/security/2015/09/11/deprecating-the-rc4-cipher/), Safari, [Edge](https://support.microsoft.com/en-us/topic/rc4-cipher-is-no-longer-supported-in-internet-explorer-11-or-microsoft-edge-f8687bc1-1f88-9abe-5c81-b00c26290f36). Prohibited by [RFC 7465](https://www.rfc-editor.org/rfc/rfc7465.html). |
+| [3DES](https://www.rfc-editor.org/rfc/rfc1851.html) | ❌ | ❌ | ❌ | Disabled in [Chrome](https://chromestatus.com/feature/6678134168485888), [Firefox](https://blog.mozilla.org/security/2021/10/05/securing-connections-disabling-3des-in-firefox-93/), ~~Safari~~, [Edge](https://learn.microsoft.com/en-us/microsoft-edge/web-platform/site-impacting-changes). Broken by [Sweet32](https://sweet32.info/), [NIST Deprecation](https://csrc.nist.gov/News/2017/Update-to-Current-Use-and-Deprecation-of-TDEA). |
 | [ARIA](https://www.rfc-editor.org/rfc/rfc5794.html) | ❌ | ✅ | ✅ | Atypical outside of South Korea. |
 | [SEED](https://www.rfc-editor.org/rfc/rfc4162.html) | ❌ | ✅ | ✅ | Atypical outside of South Korea, CBC-mode HMACs only, no PFS. |
 | [Camellia](https://www.rfc-editor.org/rfc/rfc5932.html) | ❌ | ✅ | ✅ | CBC-mode HMACs only. |
