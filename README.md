@@ -79,7 +79,7 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 | Policy | Secure | Deprecated | Legacy | Notes |
 | -- | :--: | :--: | :--: | -- |
 | ELBSecurityPolicy-2016-08 | ❌ | ❌ | ✅ | Uses TLS v1.0, v1.1; CBC-mode ciphers; no PFS. aka Default, aka ELBSecurityPolicy-2015-05.  |
-| ELBSecurityPolicy-TLS-1-0-2015-04 | ❌ | ❌ | ✅ | Uses TLS v1.0, v1.1; CBC-mode ciphers; no PFS. |
+| ELBSecurityPolicy-TLS-1-0-2015-04 | ❌ | ❌ | ❌ | Uses 3DES, TLS v1.0, v1.1; CBC-mode ciphers; no PFS. |
 | ELBSecurityPolicy-TLS-1-1-2017-01 | ❌ | ❌ | ✅ | Uses TLS v1.1; CBC-mode ciphers; no PFS. |
 | ELBSecurityPolicy-TLS-1-2-2017-01 | ❌ | ✅ | ✅ | Uses CBC-mode ciphers; no PFS. |
 | ELBSecurityPolicy-TLS-1-2-Ext-2018-06 | ❌ | ✅ | ✅ | Uses CBC-mode ciphesr; no PFS. |
@@ -108,10 +108,10 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 | -- | :--: | :--: | :--: | -- |
 | PSK | ❌ | ❌ | ✅ | Atypical. Also RSAPSK, DHEPSK, and ECDHEPSK. |
 | [SRP](https://www.rfc-editor.org/rfc/rfc2945.html) | ❌ | ✅ | ✅ | Atypical, CBC-mode HMACs only. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
-| RSA | ❌ | ✅ | ✅ | Deprecated in [draft-ietf-tls-deprecate-obsolete-kex](https://www.ietf.org/id/draft-ietf-tls-deprecate-obsolete-kex-00.html), no PFS. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
-| DH | ❌ | ✅ | ✅ | Deprecated in [draft-ietf-tls-deprecate-obsolete-kex](https://www.ietf.org/id/draft-ietf-tls-deprecate-obsolete-kex-00.html), no PFS. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
+| RSA | ❌ | ✅ | ✅ | Deprecated in [draft-ietf-tls-deprecate-obsolete-kex](https://www.ietf.org/id/draft-ietf-tls-deprecate-obsolete-kex-01.html), no PFS. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
+| DH | ❌ | ✅ | ✅ | Deprecated in [draft-ietf-tls-deprecate-obsolete-kex](https://www.ietf.org/id/draft-ietf-tls-deprecate-obsolete-kex-01.html), no PFS. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
 | DHE | ❌ | ✅ | ✅ | Parameter bit-length must be [at least 2048 bits](https://weakdh.org/). Some TLS implementations improperly implement DH parameter re-use which [weakens](https://raccoon-attack.com/) the cipher. Disabled in [Chrome](https://chromestatus.com/feature/5128908798164992), [Firefox](https://www.mozilla.org/en-US/firefox/78.0/releasenotes/), [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web). |
-| [ECDH](https://www.rfc-editor.org/rfc/rfc8422) | ❌ | ✅ | ✅ | Discouraged in [draft-ietf-tls-deprecate-obsolete-kex](https://www.ietf.org/id/draft-ietf-tls-deprecate-obsolete-kex-00.html), no PFS. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web).|
+| [ECDH](https://www.rfc-editor.org/rfc/rfc8422) | ❌ | ✅ | ✅ | Discouraged in [draft-ietf-tls-deprecate-obsolete-kex](https://www.ietf.org/id/draft-ietf-tls-deprecate-obsolete-kex-01.html), no PFS. Disabled in [Safari](https://support.apple.com/guide/security/tls-security-sec100a75d12/web).|
 | [ECDHE](https://www.rfc-editor.org/rfc/rfc8422) | ✅ | ✅ | ✅ | 
 
 **Note:** For any server using a configuration not supporting [Perfect Forward Secrecy](https://en.wikipedia.org/wiki/Forward_secrecy) (PFS) it is critical that the same certificate (e.g. a wildcard certificate) not be used on any other system. See [DROWN](https://drownattack.com/) and [Heartbleed](https://heartbleed.com).
@@ -173,7 +173,7 @@ Rather than try to enumerate the cipher suites that we allow, [like Mozilla does
 | HMAC | Secure | Deprecated | Legacy | Notes |
 | -- | :--: | :--: | :--: | -- |
 | [MD5](https://www.rfc-editor.org/rfc/rfc1321.html) | ❌ | ❌ | ❌ | Deprecated by [RFC6151](https://www.rfc-editor.org/rfc/rfc6151.html), prohibited by [draft-ietf-tls-md5-sha1-deprecate](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html). Disabled in [Chrome](https://www.chromium.org/Home/chromium-security/education/tls/#TOC-Cipher-Suites). |
-| SHA1 | ❌ | ✅ | ✅ | CBC-mode only. |
+| SHA1 | ❌ | ✅ | ✅ | CBC-mode only. Prohibited by [draft-ietf-tls-md5-sha1-deprecate](https://www.ietf.org/archive/id/draft-ietf-tls-md5-sha1-deprecate-09.html). |
 | SHA256 | ❌ | ✅ | ✅ | CBC-mode only. |
 | SHA384 | ❌ | ✅ | ✅ | CBC-mode only. |
 | [GCM](https://www.rfc-editor.org/rfc/rfc5288.html) | ✅ | ✅ | ✅ | |
